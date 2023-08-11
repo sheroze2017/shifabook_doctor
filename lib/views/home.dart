@@ -3,6 +3,7 @@ import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shifabook_doctor/views/doctor_info.dart';
+import 'package:shifabook_doctor/views/set_Avail.dart';
 
 import '../data/data.dart';
 import '../model/speciality.dart';
@@ -89,8 +90,10 @@ class _HomePageState extends State<HomePage> {
               ),
               DoctorsTile(
                 route: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => DoctorsInfo()));
+                  Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                          builder: (context) => setAvailability()));
                 },
                 title: 'Set Availaility',
               ),

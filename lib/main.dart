@@ -10,6 +10,7 @@ import 'package:shifabook_doctor/views/Authentication/login_screen.dart';
 import 'package:shifabook_doctor/views/Authentication/register_screen.dart';
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
+import 'package:shifabook_doctor/views/set_Avail.dart';
 import 'package:shifabook_doctor/views/splash_screen.dart';
 
 import 'views/Authentication/otp_screen.dart';

@@ -7,6 +7,7 @@ import 'package:shifabook_doctor/views/Authentication/form_screen.dart';
 import 'package:shifabook_doctor/views/home.dart';
 
 import '../../model/user_authentication/login_model.dart';
+import '../doctorData/doctorInfo.dart';
 
 class LoginController extends GetxController {
   var isloading = false.obs;
@@ -61,6 +62,7 @@ class LoginController extends GetxController {
         if (loginResponse.data!.user!.isProfileCreated == false) {
           Get.to(() => formScreen());
         } else {
+          await doctorProfileService().fetchAndStoreProfile();
           Get.to(() => HomePage());
         }
       } else if (response.statusCode == 404) {
