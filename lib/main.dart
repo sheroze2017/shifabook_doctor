@@ -14,6 +14,7 @@ import 'package:shifabook_doctor/views/set_Avail.dart';
 import 'package:shifabook_doctor/views/splash_screen.dart';
 
 import 'views/Authentication/otp_screen.dart';
+import 'views/doctor_info.dart';
 
 Future<void> main() async {
   Timer.periodic(Duration(seconds: 150), (timer) async {
@@ -77,7 +78,7 @@ class MyApp extends StatelessWidget {
         theme: ThemeData(
           primarySwatch: Colors.blue,
         ),
-        home: SignIn(),
+        home: SplashScreen(),
       );
     });
   }

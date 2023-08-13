@@ -144,6 +144,13 @@ class _CustomDialogState extends State<CustomDialog> {
       actions: [
         // Use a FlatButton to close the dialog and return the values
         ElevatedButton(
+          style: ElevatedButton.styleFrom(
+              foregroundColor: Colors.white,
+              backgroundColor: Color(0xffFC9535), // Text color
+              elevation: 5,
+              shape: RoundedRectangleBorder(
+                borderRadius: BorderRadius.circular(10), // Border radius
+              )),
           onPressed: () async {
             if (selectedOption.toString() == '' ||
                 day.isEmpty ||
@@ -167,10 +174,6 @@ class _CustomDialogState extends State<CustomDialog> {
                   statTime,
                   endTime);
             }
-            // Navigator.pop(context, [
-
-            // ]
-            // );
           },
           child: Text('Add'),
         ),

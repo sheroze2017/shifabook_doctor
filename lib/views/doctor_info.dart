@@ -1,6 +1,13 @@
+import 'dart:convert';
+
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:get/get.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
+import 'package:shared_preferences/shared_preferences.dart';
+import 'package:shifabook_doctor/views/set_Avail.dart';
+
+import 'update_screen.dart';
 
 class DoctorsInfo extends StatefulWidget {
   @override
@@ -8,14 +15,51 @@ class DoctorsInfo extends StatefulWidget {
 }
 
 class _DoctorsInfoState extends State<DoctorsInfo> {
+  Map<String, dynamic> doctordata = {};
+  List<dynamic> _selectedexpertise = [];
+  List<dynamic> _selectedexpertiseid = [];
+  func() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    Map<String, dynamic> fullDoctorData =
+        await jsonDecode(prefs.getString('DoctorFullData')!);
+    setState(() {
+      doctordata = fullDoctorData;
+      List<dynamic> expertise = fullDoctorData['categories'];
+      for (var item in expertise) {
+        _selectedexpertiseid.add(item['id']);
+        _selectedexpertise.add(item['name']);
+      }
+      //   _selectedqualification = fullDoctorData['doctor_user']['qualification'];
+    });
+  }
+
+  @override
+  void initState() {
+    // TODO: implement initState
+    func();
+    setState(() {});
+    super.initState();
+  }
+
   @override
   Widget build(BuildContext context) {
     return Scaffold(
       appBar: AppBar(
+        leading: Padding(
+          padding: const EdgeInsets.only(top: 8.0, left: 8),
+          child: InkWell(
+              onTap: () {
+                Get.back();
+              },
+              child: Icon(
+                Icons.arrow_back,
+                color: Colors.black,
+              )),
+        ),
         backgroundColor: Colors.transparent,
         elevation: 0.0,
-        iconTheme: const IconThemeData(color: Colors.black87),
-        systemOverlayStyle: SystemUiOverlayStyle.dark,
+        // iconTheme: const IconThemeData(color: Colors.black87),
+        // systemOverlayStyle: SystemUiOverlayStyle.dark,
       ),
       body: SingleChildScrollView(
         child: Padding(
@@ -41,39 +85,69 @@ class _DoctorsInfoState extends State<DoctorsInfo> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: <Widget>[
                         Text(
-                          "Dr. Stefeni Albert",
+                          "${doctordata['full_name']}",
                           style: TextStyle(fontSize: 20.sp),
                         ),
                         Text(
-                          "Heart Speailist",
+                          "${_selectedexpertise.join(' ')}",
                           style: TextStyle(fontSize: 16.sp, color: Colors.grey),
                         ),
                         SizedBox(
                           height: 4.h,
                         ),
-                        Row(
-                          children: <Widget>[
-                            IconTile(
-                              backColor: Color(0xffFFECDD),
-                              imgAssetPath: "assets/email.png",
-                            ),
-                            IconTile(
-                              backColor: Color(0xffFEF2F0),
-                              imgAssetPath: "assets/call.png",
-                            ),
-                            IconTile(
-                              backColor: Color(0xffEBECEF),
-                              imgAssetPath: "assets/video_call.png",
-                            ),
-                          ],
-                        )
                       ],
                     ),
                   ),
                 ],
               ),
+              Text(
+                "Qualification",
+                style: TextStyle(fontSize: 18.sp),
+              ),
+              Text(
+                "${doctordata['doctor_user']['qualification'].join(' ')}",
+                style: TextStyle(fontSize: 16.sp, color: Colors.grey),
+              ),
               SizedBox(
-                height: 5.h,
+                height: 2.h,
+              ),
+              Text(
+                "Affilation",
+                style: TextStyle(fontSize: 18.sp),
+              ),
+              Text(
+                "${doctordata['doctor_user']['affilation'].join(' ')}",
+                style: TextStyle(fontSize: 16.sp, color: Colors.grey),
+              ),
+              SizedBox(
+                height: 2.h,
+              ),
+              Row(
+                children: [
+                  Text(
+                    "Onsite Fees  ",
+                    style: TextStyle(fontSize: 18.sp),
+                  ),
+                  Text(
+                    "${doctordata['doctor_user']['onsite_consultation_fee']}",
+                    style: TextStyle(fontSize: 16.sp, color: Colors.grey),
+                  ),
+                ],
+              ),
+              Row(
+                children: [
+                  Text(
+                    "Online Fees  ",
+                    style: TextStyle(fontSize: 18.sp),
+                  ),
+                  Text(
+                    "${doctordata['doctor_user']['online_consultation_fee']}",
+                    style: TextStyle(fontSize: 16.sp, color: Colors.grey),
+                  ),
+                ],
+              ),
+              SizedBox(
+                height: 2.h,
               ),
               Text(
                 "About",
@@ -89,45 +163,26 @@ class _DoctorsInfoState extends State<DoctorsInfo> {
               SizedBox(
                 height: 3.h,
               ),
-              Row(
-                children: <Widget>[
-                  Column(
-                    children: <Widget>[
-                      Row(
-                        children: <Widget>[
-                          Image.asset("assets/mappin.png"),
-                          SizedBox(
-                            width: 3.w,
-                          ),
-                          Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: <Widget>[
-                              Text(
-                                "Address",
-                                style: TextStyle(
-                                    color: Colors.black87.withOpacity(0.7),
-                                    fontSize: 18.sp),
-                              ),
-                              SizedBox(
-                                height: 1.h,
-                              ),
-                              SizedBox(
-                                  width: 20.w,
-                                  child: Text(
-                                    "House # 2, Road # 5, Green Road Dhanmondi, Dhaka, Bangladesh",
-                                    style: TextStyle(
-                                        color: Colors.grey, fontSize: 15.sp),
-                                  ))
-                            ],
-                          )
-                        ],
-                      ),
-                      SizedBox(
-                        height: 3.h,
-                      ),
-                    ],
+              Padding(
+                padding: const EdgeInsets.only(right: 16.0),
+                child: Align(
+                  alignment: Alignment.centerRight,
+                  child: ElevatedButton(
+                    style: ElevatedButton.styleFrom(
+                        foregroundColor: Colors.white,
+                        backgroundColor: Color(0xffFC9535), // Text color
+                        elevation: 5,
+                        shape: RoundedRectangleBorder(
+                          borderRadius:
+                              BorderRadius.circular(10), // Border radius
+                        )), // Elevation (shadow) of the button
+
+                    onPressed: () {
+                      Get.to(const UpdateScreen());
+                    },
+                    child: const Text('Update Profile'),
                   ),
-                ],
+                ),
               ),
               Text(
                 "Activity",
@@ -144,32 +199,36 @@ class _DoctorsInfoState extends State<DoctorsInfo> {
                 child: Row(
                   children: <Widget>[
                     Expanded(
-                      child: Container(
-                        height: 20.h,
-                        width: 18.h,
-                        decoration: BoxDecoration(
-                            color: Color(0xffFBB97C),
-                            borderRadius: BorderRadius.circular(20)),
-                        child: Row(
-                          mainAxisAlignment: MainAxisAlignment.center,
-                          children: <Widget>[
-                            Container(
-                                padding: const EdgeInsets.only(left: 8, top: 8),
-                                decoration: BoxDecoration(
-                                    color: Color(0xffFCCA9B),
-                                    borderRadius: BorderRadius.circular(16)),
-                                child: Image.asset("assets/list.png")),
-                            SizedBox(
-                              width: 3.w,
-                            ),
-                            SizedBox(
-                              child: Text(
-                                "List Of Schedule",
-                                style: TextStyle(
-                                    color: Colors.white, fontSize: 16.sp),
+                      child: InkWell(
+                        onTap: () => Get.to(const setAvailability()),
+                        child: Container(
+                          height: 20.h,
+                          width: 18.h,
+                          decoration: BoxDecoration(
+                              color: Color(0xffFBB97C),
+                              borderRadius: BorderRadius.circular(20)),
+                          child: Row(
+                            mainAxisAlignment: MainAxisAlignment.center,
+                            children: <Widget>[
+                              Container(
+                                  padding:
+                                      const EdgeInsets.only(left: 8, top: 8),
+                                  decoration: BoxDecoration(
+                                      color: Color(0xffFCCA9B),
+                                      borderRadius: BorderRadius.circular(16)),
+                                  child: Image.asset("assets/list.png")),
+                              SizedBox(
+                                width: 3.w,
                               ),
-                            )
-                          ],
+                              SizedBox(
+                                child: Text(
+                                  "List Of Schedule",
+                                  style: TextStyle(
+                                      color: Colors.white, fontSize: 16.sp),
+                                ),
+                              )
+                            ],
+                          ),
                         ),
                       ),
                     ),

@@ -2,7 +2,9 @@ import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shifabook_doctor/views/Authentication/login_screen.dart';
+import 'package:shifabook_doctor/views/home.dart';
 
 class SplashScreen extends StatefulWidget {
   @override
@@ -13,22 +15,30 @@ class _SplashScreenState extends State<SplashScreen>
     with SingleTickerProviderStateMixin {
   late AnimationController _animationController;
 
+  func() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+
+    String? token = prefs.getString('refresh_Token');
+    if (token != null) {
+      Get.to(HomePage(), transition: Transition.circularReveal);
+    } else {
+      Get.to(SignIn(), transition: Transition.native);
+    }
+  }
+
   @override
   void initState() {
     super.initState();
     _animationController = AnimationController(
-      duration: const Duration(seconds: 2),
+      duration: const Duration(seconds: 4),
       vsync: this,
     );
     _animationController.forward();
 
     // Delay navigation to a new screen after 2 seconds
     Future.delayed(Duration(seconds: 5), () {
-      // Navigator.pushReplacement(
-      //   context,
-      //   MaterialPageRoute(builder: (context) => SignIn()),
-      // );
-      Get.to(SignIn(), transition: Transition.circularReveal);
+      func();
+      // Get.to(SignIn(), transition: Transition.circularReveal);
     });
   }
 

@@ -3,20 +3,20 @@ import 'package:google_fonts/google_fonts.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
 class CustomTextFormField extends StatelessWidget {
-  final FocusNode focusNode;
+  final FocusNode? focusNode;
   final TextEditingController controller;
-  final String hintText;
+  final String? hintText;
   final Function(String)? onFieldSubmitted;
   final TextInputAction textInputAction;
   final String? Function(String?)? validator;
   final String? labeltext;
   const CustomTextFormField({
     Key? key,
-    required this.focusNode,
+    this.focusNode,
     this.labeltext,
     required this.controller,
-    required this.hintText,
-    required this.onFieldSubmitted,
+    this.hintText,
+    this.onFieldSubmitted,
     this.textInputAction = TextInputAction.next,
     this.validator,
   }) : super(key: key);

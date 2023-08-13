@@ -1,10 +1,17 @@
+import 'dart:convert';
+
+import 'package:get/get.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shifabook_doctor/views/doctor_info.dart';
 import 'package:shifabook_doctor/views/set_Avail.dart';
+import 'package:shifabook_doctor/views/update_screen.dart';
 
+import '../Controller/doctorData/Availability.dart';
+import '../components/appbar.dart';
 import '../data/data.dart';
 import '../model/speciality.dart';
 
@@ -17,12 +24,25 @@ class HomePage extends StatefulWidget {
 
 class _HomePageState extends State<HomePage> {
   List<String> categories = ["Adults", "Childrens", "Womens", "Mens"];
-
+  final SwitchController _switchController = Get.put(SwitchController());
   late List<SpecialityModel> specialities;
+
+  func() async {
+    SharedPreferences prefs = await SharedPreferences.getInstance();
+    Map<String, dynamic> fullDoctorData =
+        await jsonDecode(prefs.getString('DoctorFullData')!);
+    var is_busy = fullDoctorData['is_active'];
+    var on_leave = fullDoctorData['doctor_availability']['on_leave'];
+    _switchController.isLeaveOn.value = on_leave;
+    _switchController.isSwitchedOn.value = is_busy;
+
+    print(fullDoctorData);
+  }
 
   @override
   void initState() {
     // TODO: implement initState
+    func();
     super.initState();
 
     specialities = getSpeciality();
@@ -31,10 +51,11 @@ class _HomePageState extends State<HomePage> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(
+      drawer: const NavigationDrawer1(),
       appBar: AppBar(
         actions: [
           Padding(
-            padding: const EdgeInsets.only(top: 8.0, right: 8),
+            padding: const EdgeInsets.only(top: 12.0, right: 8),
             child: IconButton(
               icon: Icon(
                 Icons.notification_important,
@@ -53,8 +74,6 @@ class _HomePageState extends State<HomePage> {
         iconTheme: IconThemeData(color: Colors.black87),
         systemOverlayStyle: SystemUiOverlayStyle.dark,
       ),
-      drawer: Drawer(child: Container() // Populate the Drawer in the next step.
-          ),
       body: SingleChildScrollView(
         child: Container(
           color: Colors.white,
@@ -62,9 +81,6 @@ class _HomePageState extends State<HomePage> {
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.start,
             children: <Widget>[
-              SizedBox(
-                height: 2.h,
-              ),
               Align(
                 alignment: Alignment.center,
                 child: Text(
@@ -76,14 +92,89 @@ class _HomePageState extends State<HomePage> {
                 ),
               ),
               SizedBox(
-                height: 4.h,
+                height: 2.h,
+              ),
+              Align(
+                alignment: Alignment.center,
+                child: Obx(
+                  () => Row(
+                    mainAxisAlignment: MainAxisAlignment.spaceEvenly,
+                    children: [
+                      Row(
+                        children: [
+                          Obx(
+                            () => Container(
+                              decoration: BoxDecoration(
+                                color: Color.fromARGB(255, 231, 213, 162),
+                                borderRadius:
+                                    BorderRadius.circular(10), // Border radius
+                                border: Border.all(
+                                  color: Colors.black, // Border color
+                                  width: 1, // Border width
+                                ),
+                              ),
+                              child: Text(
+                                _switchController.isSwitchedOn.value
+                                    ? ' Online '
+                                    : ' Offline ',
+                                style: TextStyle(fontSize: 16.sp),
+                              ),
+                            ),
+                          ),
+                          Switch(
+                            activeColor: Colors.green,
+                            inactiveThumbColor: Colors.grey,
+                            value: _switchController.isSwitchedOn.value,
+                            onChanged: (value) {
+                              _switchController.toggleSwitch();
+                              _switchController.updateonlinebusy();
+                            },
+                          ),
+                        ],
+                      ),
+                      SizedBox(width: 10.w),
+                      Row(
+                        children: [
+                          Obx(
+                            () => Container(
+                              decoration: BoxDecoration(
+                                color: Color.fromARGB(255, 231, 213, 162),
+                                borderRadius:
+                                    BorderRadius.circular(10), // Border radius
+                                border: Border.all(
+                                  color: Colors.black, // Border color
+                                  width: 1, // Border width
+                                ),
+                              ),
+                              child: Text(
+                                _switchController.isLeaveOn.value
+                                    ? ' Available '
+                                    : ' Busy ',
+                                style: TextStyle(fontSize: 16.sp),
+                              ),
+                            ),
+                          ),
+                          Switch(
+                            activeColor: Colors.green,
+                            inactiveThumbColor: Colors.grey,
+                            value: _switchController.isLeaveOn.value,
+                            onChanged: (value) {
+                              _switchController.toggleSwitch2();
+                              _switchController.updateonlinebusy();
+                            },
+                          ),
+                        ],
+                      ),
+                    ],
+                  ),
+                ),
               ),
               DoctorsTile(
                 route: () {
                   Navigator.push(context,
                       MaterialPageRoute(builder: (context) => DoctorsInfo()));
                 },
-                title: 'Update Profile',
+                title: 'Profile',
               ),
               SizedBox(
                 height: 4.h,

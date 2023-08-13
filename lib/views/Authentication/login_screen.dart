@@ -17,9 +17,11 @@ class SignIn extends StatefulWidget {
 class _SignInState extends State<SignIn> {
   // FirebaseAuth _auth = FirebaseAuth.instance;
   final GlobalKey<FormState> _formKey = GlobalKey<FormState>();
-  final TextEditingController _emailController = TextEditingController();
+  final TextEditingController _emailController =
+      TextEditingController(text: "+923000000007");
   final GlobalKey<ScaffoldState> _scaffoldKey = GlobalKey<ScaffoldState>();
-  final TextEditingController _passwordController = TextEditingController();
+  final TextEditingController _passwordController =
+      TextEditingController(text: "123456");
   final LoginController LController = Get.put(LoginController());
 
   FocusNode f1 = new FocusNode();

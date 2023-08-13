@@ -11,6 +11,7 @@ import '../doctorData/doctorInfo.dart';
 
 class LoginController extends GetxController {
   var isloading = false.obs;
+  var logoutLoader = false.obs;
   Future<void> login(String mobile, String password) async {
     isloading.value = true;
     SharedPreferences prefs = await SharedPreferences.getInstance();
