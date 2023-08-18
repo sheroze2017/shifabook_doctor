@@ -32,12 +32,20 @@ class doctorProfileService extends GetxController {
       if (response.statusCode == 200) {
         final Map<String, dynamic> parsedData = json.decode(response.body);
         final Map<String, List<Schedule>> availabilityMap = {};
-        final List<dynamic> availabilityData =
-            parsedData['data']['doctor_availability']['availability'];
+        if (parsedData['data']['doctor_availability'] == null) {
+          List<dynamic> availabilityData = [];
+          prefs.setString('DoctorAvailability', jsonEncode(availabilityData));
+        } else {
+          List<dynamic> availabilityData =
+              parsedData['data']['doctor_availability']['availability']!;
+          print(availabilityData.length);
+          prefs.setString('DoctorAvailability', jsonEncode(availabilityData));
+        }
+
         final Map<String, dynamic> doctorFullData = parsedData['data'];
         print(doctorFullData);
         prefs.setString('DoctorFullData', jsonEncode(doctorFullData));
-        prefs.setString('DoctorAvailability', jsonEncode(availabilityData));
+
         //accountData = await doctorProfile.fromJson(jsonDecode(response.body));
         //var userData = await accountData.data;
         // for (final availabilityItem in availabilityData) {

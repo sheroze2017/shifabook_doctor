@@ -17,6 +17,8 @@ import 'views/Authentication/otp_screen.dart';
 import 'views/doctor_info.dart';
 
 Future<void> main() async {
+  WidgetsFlutterBinding.ensureInitialized();
+
   Timer.periodic(Duration(seconds: 150), (timer) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
 

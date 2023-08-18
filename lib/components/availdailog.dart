@@ -125,15 +125,15 @@ class _CustomDialogState extends State<CustomDialog> {
             activeBorderColor: Colors.black,
             backgroundColor: Colors.transparent,
             activeBackgroundColor: Colors.black,
-            firstTime: const TimeOfDay(hour: 0, minute: 00),
-            lastTime: const TimeOfDay(hour: 23, minute: 00),
+            firstTime: TimeOfDay(hour: 7, minute: 00),
+            lastTime: TimeOfDay(hour: 23, minute: 00),
             initialRange: _timeRange,
             timeStep: 60,
             timeBlock: 60,
             onRangeCompleted: (range) => setState(() {
               _timeRange = range;
-              print(_timeRange!.start.hour);
-              print(_timeRange!.end.hour);
+              print(_timeRange!.start.period);
+              print(_timeRange!.end.period);
             }),
             onFirstTimeSelected: (lastTime) {
               print(lastTime);
@@ -172,7 +172,8 @@ class _CustomDialogState extends State<CustomDialog> {
                   locations.indexOf(selectedOption) + 1,
                   day,
                   statTime,
-                  endTime);
+                  endTime,
+                  _timeRange!);
             }
           },
           child: Text('Add'),

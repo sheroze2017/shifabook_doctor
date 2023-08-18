@@ -52,13 +52,13 @@ class _formScreenState extends State<formScreen> {
     "General Physician",
     "Eye Specialist"
   ];
-  Map<String, int> cityMap2 = {
-    'karachi': 1,
-    'lahore': 2,
-    'islamabad': 3,
-    'quetta': 4,
-    'peshawar': 5,
-  };
+  List<String> cities = [
+    'Karachi',
+    'Lahore',
+    'Islamabad',
+    'Quetta',
+    'Peshawar',
+  ];
   late String selectedCountry;
   late String selectedState;
   late String _selectedGender = 'male';
@@ -79,7 +79,7 @@ class _formScreenState extends State<formScreen> {
   int selectedCityId = 0; // Selected city ID
 
   String? selectedValue;
-  final controller = Get.put(LocationController());
+  //final controller = Get.put(LocationController());
 
   @override
   Widget build(BuildContext context) {
@@ -487,76 +487,32 @@ class _formScreenState extends State<formScreen> {
                   height: 2.h,
                 ),
                 Container(
-                  height: 6.h,
-                  child: TextFormField(
-                    focusNode: f9,
-                    style: GoogleFonts.lato(
-                      fontSize: 14,
-                      fontWeight: FontWeight.w800,
+                    height: 6.h,
+                    width: 80.h,
+                    padding: EdgeInsets.symmetric(horizontal: 20),
+                    decoration: BoxDecoration(
+                      color: Colors.grey[350],
+                      borderRadius: BorderRadius.circular(20),
+                      border: Border.all(color: Colors.grey),
                     ),
-                    onChanged: (value) {
-                      print(value);
-                      print(cityMap2.entries);
-                      if (cityMap2.containsKey(
-                          _locationController.text.toLowerCase())) {
-                        print('find');
-                        print(value);
-                        selectedCityId =
-                            cityMap2[_locationController.text.toLowerCase()]!;
-                        //print('$cityName has a value of $cityValue');
-                      } else {
-                        // print('City not found in the map');
-                      }
-                    },
-                    controller: _locationController,
-                    decoration: InputDecoration(
-                      hintText: 'City',
-                      labelText: 'Location',
-                      suffixIcon: IconButton(
-                          icon: Icon(Icons.location_on),
-                          onPressed: () async {
-                            await controller.getCurrentLocation();
-                            _locationController.text =
-                                await controller.currentLocation ?? '';
-                            if (cityMap2.containsKey(
-                                _locationController.text.toLowerCase())) {
-                              print('find');
-                              selectedCityId = cityMap2[
-                                  _locationController.text.toLowerCase()]!;
-                            }
-                          }),
-                      contentPadding:
-                          EdgeInsets.only(left: 20, top: 10, bottom: 10),
-                      border: const OutlineInputBorder(
-                          borderRadius: BorderRadius.all(
-                            Radius.circular(90.0),
-                          ),
-                          borderSide:
-                              BorderSide(color: Colors.indigo, width: 2)),
-                      filled: true,
-                      fillColor: Colors.grey[350],
-                      hintStyle: GoogleFonts.lato(
-                        color: Colors.black26,
-                        fontSize: 18,
-                        fontWeight: FontWeight.w800,
-                      ),
-                    ),
-                    onFieldSubmitted: (value) {
-                      f9.unfocus();
-                      FocusScope.of(context).requestFocus(f10);
-                    },
-                    textInputAction: TextInputAction.next,
-                    validator: (value) {
-                      if (value!.isEmpty) {
-                        return 'Please enter the location';
-                      } else if (selectedCityId == 0) {
-                        return 'Please enter Valid location';
-                      } else {
-                        return null;
-                      }
-                    },
-                  ),
-                ),
+                    child: DropdownButton<String>(
+                      hint: Text('City', style: TextStyle(color: Colors.black)),
+                      value: selectedCity,
+                      onChanged: (value) {
+                        setState(() {
+                          selectedCity = value.toString();
+                          selectedCityId = cities.indexOf(value.toString()) + 1;
+                          print(selectedCityId);
+                        });
+                      },
+                      items:
+                          cities.map<DropdownMenuItem<String>>((String value) {
+                        return DropdownMenuItem<String>(
+                          value: value,
+                          child: Text(value),
+                        );
+                      }).toList(),
+                    )),
                 SizedBox(
                   height: 2.h,
                 ),
@@ -652,7 +608,7 @@ class _formScreenState extends State<formScreen> {
                           // focusNode: f3,
                           child: Obx(() {
                             if (Dcontroller.isloading.value) {
-                              return SpinKitFadingCube(
+                              return SpinKitWave(
                                 color: Colors.white,
                                 size: 7.w,
                               );
@@ -675,6 +631,4 @@ class _formScreenState extends State<formScreen> {
       ),
     );
   }
-
-
 }

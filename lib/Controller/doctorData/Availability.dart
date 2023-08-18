@@ -3,12 +3,13 @@ import 'package:flutter/material.dart';
 import 'package:http/http.dart' as http;
 import 'package:get/get.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:time_range/time_range.dart';
 
 class availbility extends GetxController {
   final AvailabilityData = {};
 
-  updateAvailibility(
-      int id, List days, String starttime, String endtime) async {
+  updateAvailibility(int id, List days, String starttime, String endtime,
+      TimeRangeResult timeRange) async {
     SharedPreferences prefs = await SharedPreferences.getInstance();
     List<dynamic> availability =
         await jsonDecode(prefs.getString('DoctorAvailability')!);
@@ -17,7 +18,19 @@ class availbility extends GetxController {
       availability.add({
         "Day": day,
         "times": [
-          {"start_time": starttime + '0', "end_time": endtime + '0'}
+          {
+            "start_time": starttime + '0'
+            //  +
+            // (timeRange.start.period.toString() == DayPeriod.am.toString()
+            //     ? 'am'
+            //     : 'pm'),
+            ,
+            "end_time": endtime + '0'
+            //  +
+            // (timeRange.start.period.toString() == DayPeriod.am.toString()
+            //     ? 'am'
+            //     : 'pm'),
+          }
         ],
         "landmark_id": id
       });
@@ -39,6 +52,7 @@ class availbility extends GetxController {
 
       Get.snackbar('Message', 'Updated');
     } else {
+      print(response.body);
       Get.snackbar('Message', 'Error adding time');
     }
   }

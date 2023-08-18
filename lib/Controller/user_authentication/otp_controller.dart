@@ -50,7 +50,7 @@ class OTPController extends GetxController {
   }
 
   Future<void> verifyUser(String mobile, String pin) async {
-    String url = 'http://3.80.54.173:4005/api/v1/users/check';
+    String url = 'http://3.80.54.173:4005/api/v1/users/verify';
 
     Map<String, dynamic> requestBody = {
       'mobile': mobile,
@@ -68,6 +68,7 @@ class OTPController extends GetxController {
         var jsonResponse = json.decode(response.body);
         bool status = await jsonResponse['status'];
         String message = await jsonResponse['message'];
+        print(response.body);
         // Handle the response data according to your requirements
         Get.snackbar('Success', 'Pin Match ');
         await Get.to(SignIn());
@@ -78,7 +79,7 @@ class OTPController extends GetxController {
         String error = jsonResponse['error'];
         // Handle the response data according to your requirements
         await Get.snackbar('Error', 'User Verified or Already Exist');
-        await Get.to(SignIn());
+        // await Get.to(SignIn());
         // ...
       } else if (response.statusCode == 404) {
         var jsonResponse = json.decode(response.body);

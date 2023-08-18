@@ -64,7 +64,7 @@ class LoginController extends GetxController {
           Get.to(() => formScreen());
         } else {
           await doctorProfileService().fetchAndStoreProfile();
-          Get.to(() => HomePage());
+           Get.to(() => HomePage());
         }
       } else if (response.statusCode == 404) {
         // Invalid credentials

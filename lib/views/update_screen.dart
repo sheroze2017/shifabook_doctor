@@ -24,7 +24,6 @@ class _UpdateScreenState extends State<UpdateScreen> {
   final DoctorController Dcontroller = Get.put(DoctorController());
   TextEditingController _expController = TextEditingController();
   TextEditingController _nameController = TextEditingController();
-
   TextEditingController _onlinefeeController = TextEditingController();
   TextEditingController _onsitefeeController = TextEditingController();
   TextEditingController _dobController = TextEditingController();
@@ -579,70 +578,55 @@ class _UpdateScreenState extends State<UpdateScreen> {
                       Container(
                         padding: const EdgeInsets.only(top: 25.0),
                         child: SizedBox(
-                            width: 40.w,
-                            height: 5.h,
-                            child: ElevatedButton(
+                          width: 40.w,
+                          height: 5.h,
+                          child: ElevatedButton(
+                            // focusNode: f3,
+                            onPressed: () async {
+                              print(_selectedaffiliation);
+                              if (_formKey.currentState!.validate()) {
+                                await UpdatePofile().updateDoctorProfile(
+                                    _nameController.text.toString(),
+                                    _ageController.text.toString(),
+                                    _expController.text.toString(),
+                                    _selectedqualification,
+                                    _selectedexpertise,
+                                    _selectedexpertiseid,
+                                    _selectedaffiliation,
+                                    selectedCityId);
+                              }
+                            },
 
-                                // focusNode: f3,
-                                onPressed: () async {
-                                  print(_selectedaffiliation);
-                                  if (_formKey.currentState!.validate()) {
-                                    await UpdatePofile().updateDoctorProfile(
-                                        _nameController.text.toString(),
-                                        _ageController.text.toString(),
-                                        _expController.text.toString(),
-                                        _selectedqualification,
-                                        _selectedexpertise,
-                                        _selectedexpertiseid,
-                                        _selectedaffiliation,
-                                        selectedCityId);
-                                    // await Dcontroller.createDoctor(
-                                    //     _selectedGender,
-                                    //     _nameController.text,
-                                    //     _selectedqualification,
-                                    //     _selectedexpertise,
-                                    //     _selectedexpertiseid,
-                                    //     _selectedaffiliation,
-                                    //     _expController.text,
-                                    //     _onsitefeeController.text,
-                                    //     _onlinefeeController.text,
-                                    //     selectedCityId,
-                                    //     _ageController.text,
-                                    //     _dobController.text);
-                                  }
-                                  // Get.to(HomePage());
-                                },
-                                // if (_formKey.currentState.validate()) {
-                                //   showLoaderDialog(context);
-                                //   _signInWithEmailAndPassword();
-                                // }
-
-                                style: ElevatedButton.styleFrom(
-                                  foregroundColor: Colors.black,
-                                  backgroundColor: Colors.indigo[900],
-                                  elevation: 2,
-                                  shape: RoundedRectangleBorder(
-                                    borderRadius: BorderRadius.circular(32.0),
-                                  ),
-                                ),
-                                // focusNode: f3,
-                                child: Obx(() {
-                                  if (Dcontroller.isloading.value) {
-                                    return SpinKitWave(
+                            style: ElevatedButton.styleFrom(
+                              foregroundColor: Colors.black,
+                              backgroundColor: Colors.indigo[900],
+                              elevation: 2,
+                              shape: RoundedRectangleBorder(
+                                borderRadius: BorderRadius.circular(32.0),
+                              ),
+                            ),
+                            // focusNode: f3,
+                            child: Obx(
+                              () {
+                                if (Dcontroller.isloading.value) {
+                                  return SpinKitWave(
+                                    color: Colors.white,
+                                    size: 6.w,
+                                  );
+                                } else {
+                                  return Text(
+                                    "Update",
+                                    style: GoogleFonts.lato(
                                       color: Colors.white,
-                                      size: 6.w,
-                                    );
-                                  } else {
-                                    return Text(
-                                      "Update",
-                                      style: GoogleFonts.lato(
-                                        color: Colors.white,
-                                        fontSize: 18.0,
-                                        fontWeight: FontWeight.bold,
-                                      ),
-                                    );
-                                  }
-                                }))),
+                                      fontSize: 18.0,
+                                      fontWeight: FontWeight.bold,
+                                    ),
+                                  );
+                                }
+                              },
+                            ),
+                          ),
+                        ),
                       ),
                     ]),
                   ),

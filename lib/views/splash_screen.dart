@@ -20,9 +20,11 @@ class _SplashScreenState extends State<SplashScreen>
 
     String? token = prefs.getString('refresh_Token');
     if (token != null) {
-      Get.to(HomePage(), transition: Transition.circularReveal);
+      Get.to(HomePage(),
+          transition: Transition.fade, duration: Duration(milliseconds: 500));
     } else {
-      Get.to(SignIn(), transition: Transition.native);
+      Get.to(SignIn(),
+          transition: Transition.fade, duration: Duration(milliseconds: 500));
     }
   }
 
@@ -30,13 +32,13 @@ class _SplashScreenState extends State<SplashScreen>
   void initState() {
     super.initState();
     _animationController = AnimationController(
-      duration: const Duration(seconds: 4),
+      duration: const Duration(seconds: 3),
       vsync: this,
     );
     _animationController.forward();
 
     // Delay navigation to a new screen after 2 seconds
-    Future.delayed(Duration(seconds: 5), () {
+    Future.delayed(Duration(seconds: 3), () {
       func();
       // Get.to(SignIn(), transition: Transition.circularReveal);
     });

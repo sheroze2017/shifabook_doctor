@@ -5,6 +5,8 @@ import 'package:http/http.dart' as http;
 import 'package:shared_preferences/shared_preferences.dart';
 import 'package:shifabook_doctor/views/home.dart';
 
+import '../doctorData/doctorInfo.dart';
+
 class DoctorController extends GetxController {
   var isloading = false.obs;
   Future<void> createDoctor(
@@ -59,34 +61,29 @@ class DoctorController extends GetxController {
       if (response.statusCode == 200) {
         // Successful response
         print('Doctor created successfully');
-        await prefs.setString('Gender', selectedGender);
-        await prefs.setString('liscense', nameController);
-        await prefs.setStringList('qualification', selectedqualification);
-        await prefs.setStringList('expertise', selectedexpertise);
-        await prefs.setStringList(
-            'expertiseid', selectedexpertiseid.cast<String>());
-        await prefs.setStringList('affiliation', selectedaffiliation);
-        await prefs.setString('experience', expController);
-        await prefs.setString('onsitefee', onsitefeeController);
-        await prefs.setString('onlinefee', onlinefeeController);
-        await prefs.setInt('CityId', selectedCityId);
-        await prefs.setString('age', ageController);
-        await prefs.setString('dob', dobController);
-        Future.delayed(Duration(seconds: 3));
+        isloading.value = true;
 
-        final response2nd = await http.post(Uri.parse(url),
-            headers: {
-              "Authorization": "Bearer $access_token",
-              "Content-Type": "application/json",
-            },
-            body: jsonEncode(body));
-        if (response2nd.statusCode == 409) {
+        Future.delayed(Duration(seconds: 4)).then((value) async {
+          await doctorProfileService().fetchAndStoreProfile();
+          isloading.value = false;
+
           Get.to(HomePage());
-        }
-      } else {
-        print('Failed to create doctor: ${response.body}');
-        Get.snackbar('Error', 'Invalid Credentials');
-        // Handle any error messages or UI updates here
+        });
+
+        //   final response2nd = await http.post(Uri.parse(url),
+        //       headers: {
+        //         "Authorization": "Bearer $access_token",
+        //         "Content-Type": "application/json",
+        //       },
+        //       body: jsonEncode(body));
+        //   if (response2nd.statusCode == 409) {
+        //     Get.to(HomePage());
+        //   }
+        // } else {
+        //   print('Failed to create doctor: ${response.body}');
+        //   Get.snackbar('Error', 'Invalid Credentials');
+        //   // Handle any error messages or UI updates here
+        // }
       }
     } catch (error) {
       // Handle network or other errors

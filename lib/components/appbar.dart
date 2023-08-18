@@ -13,7 +13,7 @@ import '../Controller/user_authentication/login_controller.dart';
 import '../views/home.dart';
 
 class NavigationDrawer1 extends StatelessWidget {
-  const NavigationDrawer1({Key? key}) : super(key: key);
+  final lcontroller = Get.put(LoginController());
 
   @override
   Widget build(BuildContext context) {
@@ -97,7 +97,14 @@ class NavigationDrawer1 extends StatelessWidget {
               ),
             ),
           ),
-          LoadingDialog()
+          Obx(() {
+            if (lcontroller.logoutLoader.value) {
+              return LoadingDialog();
+            } else {
+              return Container();
+            }
+          })
+          //   LoadingDialog()
         ]),
       ),
     );
@@ -105,7 +112,7 @@ class NavigationDrawer1 extends StatelessWidget {
 
   void onItemPressed(BuildContext context, {required int index}) {
     // Navigator.pop(context);
-
+    final lcontroller = Get.put(LoginController());
     switch (index) {
       case 1:
         Navigator.push(
@@ -116,8 +123,11 @@ class NavigationDrawer1 extends StatelessWidget {
             MaterialPageRoute(builder: (context) => const UpdateScreen()));
         break;
       case 3:
-        LoginController().logoutLoader.value = true;
+        // print(lcontroller.logoutLoader.value);
+        lcontroller.logoutLoader.value = true;
         fun();
+
+      // LoadingDialog();
     }
   }
 
@@ -147,7 +157,7 @@ class NavigationDrawer1 extends StatelessWidget {
         print('clear data');
       } else {
         Future.delayed(Duration(seconds: 5))
-            .then((value) => LoginController().logoutLoader.value = false);
+            .then((value) => lcontroller.logoutLoader.value = false);
       }
     } catch (error) {
       print(error);
@@ -229,17 +239,21 @@ class DrawerItem extends StatelessWidget {
 class LoadingDialog extends StatelessWidget {
   @override
   Widget build(BuildContext context) {
-    return Obx(() => LoginController().logoutLoader.value
-        ? AlertDialog(
-            content: Row(
-              children: [
-                CircularProgressIndicator(),
-                SizedBox(width: 16),
-                Text('Loading...'),
-              ],
-            ),
-          )
-        : Container());
+    return AlertDialog(
+      content: Row(
+        children: [
+          CircularProgressIndicator(
+            color: Color(0xffFBB97C),
+            strokeWidth: 2,
+          ),
+          SizedBox(width: 16),
+          Text(
+            'Logging Out...',
+            style: TextStyle(fontSize: 17.sp),
+          ),
+        ],
+      ),
+    );
   }
 }
 
