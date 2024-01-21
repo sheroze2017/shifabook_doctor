@@ -71,7 +71,7 @@ class availbility extends GetxController {
 
     if (response.statusCode == 200) {
       prefs.setString('DoctorAvailability', jsonEncode(availability));
-      Get.snackbar('Message', 'Remove Time');
+      Get.snackbar('Message', 'Removed');
     }
   }
 }

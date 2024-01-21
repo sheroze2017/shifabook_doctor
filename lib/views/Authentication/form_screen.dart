@@ -75,7 +75,7 @@ class _formScreenState extends State<formScreen> {
   FocusNode f10 = new FocusNode();
   FocusNode f11 = new FocusNode();
   FocusNode f12 = new FocusNode();
-  String selectedCity = ''; // Selected city name
+  String? selectedCity; // Selected city name
   int selectedCityId = 0; // Selected city ID
 
   String? selectedValue;
@@ -496,7 +496,7 @@ class _formScreenState extends State<formScreen> {
                       border: Border.all(color: Colors.grey),
                     ),
                     child: DropdownButton<String>(
-                      hint: Text('City', style: TextStyle(color: Colors.black)),
+                      hint: Text('', style: TextStyle(color: Colors.black)),
                       value: selectedCity,
                       onChanged: (value) {
                         setState(() {

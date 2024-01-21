@@ -1,4 +1,5 @@
 import 'package:flutter_spinkit/flutter_spinkit.dart';
+import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:shifabook_doctor/Controller/user_authentication/login_controller.dart';
 import 'package:shifabook_doctor/views/home.dart';
@@ -27,6 +28,10 @@ class _SignInState extends State<SignIn> {
   FocusNode f1 = new FocusNode();
   FocusNode f2 = new FocusNode();
   FocusNode f3 = new FocusNode();
+  var maskFormatter = new MaskTextInputFormatter(
+      mask: '+92##########',
+      filter: {"#": RegExp(r'[0-9]')},
+      type: MaskAutoCompletionType.lazy);
 
   @override
   Widget build(BuildContext context) {
@@ -84,6 +89,7 @@ class _SignInState extends State<SignIn> {
               height: 3.h,
             ),
             TextFormField(
+              inputFormatters: [maskFormatter],
               focusNode: f1,
               style: GoogleFonts.lato(
                 fontSize: 18,
@@ -244,7 +250,9 @@ class _SignInState extends State<SignIn> {
                       style: ButtonStyle(
                           overlayColor:
                               MaterialStateProperty.all(Colors.transparent)),
-                      onPressed: () => Get.to(Register()),
+                      onPressed: () => Get.to(Register(),
+                          transition: Transition.downToUp,
+                          duration: Duration(milliseconds: 500)),
                       child: Text(
                         'Signup here',
                         style: GoogleFonts.lato(

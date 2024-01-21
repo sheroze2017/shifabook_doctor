@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:get/get.dart';
 import 'package:google_fonts/google_fonts.dart';
+import 'package:mask_text_input_formatter/mask_text_input_formatter.dart';
 import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:flutter_spinkit/flutter_spinkit.dart';
 
@@ -41,6 +42,11 @@ class _RegisterState extends State<Register> {
     _passwordController.dispose();
     super.dispose();
   }
+
+  var maskFormatter = new MaskTextInputFormatter(
+      mask: '+92##########',
+      filter: {"#": RegExp(r'[0-9]')},
+      type: MaskAutoCompletionType.lazy);
 
   @override
   Widget build(BuildContext context) {
@@ -187,7 +193,8 @@ class _RegisterState extends State<Register> {
                           fontSize: 18,
                           fontWeight: FontWeight.w800,
                         ),
-                        keyboardType: TextInputType.emailAddress,
+                        keyboardType: TextInputType.phone,
+                        inputFormatters: [maskFormatter],
                         controller: _mobileNo,
                         decoration: InputDecoration(
                           labelText: 'Phone No',
@@ -268,7 +275,7 @@ class _RegisterState extends State<Register> {
                           if (value!.isEmpty) {
                             return 'Please enter the Password';
                           } else if (value.length < 6) {
-                            return 'Password must be at least 6 characters long';
+                            return 'Password must be at least\n6 characters long';
                           } else {
                             return null;
                           }

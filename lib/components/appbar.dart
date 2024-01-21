@@ -10,6 +10,7 @@ import 'package:shifabook_doctor/views/doctor_info.dart';
 import 'package:shifabook_doctor/views/update_screen.dart';
 
 import '../Controller/user_authentication/login_controller.dart';
+import '../views/Booking/bookinglog.dart';
 import '../views/home.dart';
 
 class NavigationDrawer1 extends StatelessWidget {
@@ -83,9 +84,16 @@ class NavigationDrawer1 extends StatelessWidget {
                     height: 30,
                   ),
                   DrawerItem(
-                      name: 'Setting',
+                      name: 'Update',
                       icon: Icons.settings,
                       onPressed: () => onItemPressed(context, index: 2)),
+                  const SizedBox(
+                    height: 30,
+                  ),
+                  DrawerItem(
+                      name: 'Booking Details',
+                      icon: Icons.settings,
+                      onPressed: () => onItemPressed(context, index: 6)),
                   const SizedBox(
                     height: 30,
                   ),
@@ -115,12 +123,13 @@ class NavigationDrawer1 extends StatelessWidget {
     final lcontroller = Get.put(LoginController());
     switch (index) {
       case 1:
-        Navigator.push(
-            context, MaterialPageRoute(builder: (context) => DoctorsInfo()));
+        Get.to(DoctorsInfo(), transition: Transition.native);
         break;
       case 2:
-        Navigator.push(context,
-            MaterialPageRoute(builder: (context) => const UpdateScreen()));
+        Get.to(UpdateScreen(), transition: Transition.native);
+        break;
+      case 6:
+        Get.to(BookingLogs(), transition: Transition.native);
         break;
       case 3:
         // print(lcontroller.logoutLoader.value);
@@ -152,7 +161,7 @@ class NavigationDrawer1 extends StatelessWidget {
 
       if (response.statusCode == 200) {
         prefs.clear();
-        Get.to(SignIn());
+        Get.offAll(SignIn(), transition: Transition.fade);
         // Future.delayed(Duration(seconds: 2));
         print('clear data');
       } else {

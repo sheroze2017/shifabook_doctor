@@ -1,3 +1,5 @@
+import 'dart:convert';
+import 'package:http/http.dart' as http;
 import 'package:flutter/material.dart';
 import 'package:get/get.dart';
 import 'package:lottie/lottie.dart';
@@ -20,10 +22,11 @@ class _SplashScreenState extends State<SplashScreen>
 
     String? token = prefs.getString('refresh_Token');
     if (token != null) {
-      Get.to(HomePage(),
+      await accessFunc();
+      Get.offAll(HomePage(),
           transition: Transition.fade, duration: Duration(milliseconds: 500));
     } else {
-      Get.to(SignIn(),
+      Get.offAll(SignIn(),
           transition: Transition.fade, duration: Duration(milliseconds: 500));
     }
   }
@@ -119,5 +122,46 @@ class _SplashScreenState extends State<SplashScreen>
         ),
       ),
     );
+  }
+}
+
+accessFunc() async {
+  SharedPreferences prefs = await SharedPreferences.getInstance();
+
+  String? refreshToken = prefs.getString('refresh_Token');
+  String? mobile = prefs.getString('mobile');
+  if (refreshToken != null && mobile != null) {
+    final url = Uri.parse('http://3.80.54.173:4005/api/v1/users/token');
+
+    final body = jsonEncode({
+      "email": "{{email}}",
+      "mobile": mobile,
+      "refresh_token": refreshToken
+    });
+
+    final headers = {'Content-Type': 'application/json'};
+
+    try {
+      final response = await http.post(url, headers: headers, body: body);
+
+      if (response.statusCode == 200) {
+        //print(jsonDecode(response.body)['data']['access_token']);
+        // Success
+        print('API hit successful');
+        String accessToken =
+            await jsonDecode(response.body)['data']['access_token'];
+        await prefs.setString('access_Token', accessToken.toString());
+        print(prefs.getString('access_Token'));
+        // await UserProfileService().fetchAndStoreProfile();
+      } else {
+        // Handle error
+        print('Failed to hit the API. Status code: ${response.statusCode}');
+      }
+    } catch (e) {
+      // Handle error
+      print('Error hitting the API: $e');
+    }
+  } else {
+    print('print no data yet');
   }
 }

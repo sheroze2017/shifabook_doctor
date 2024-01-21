@@ -38,7 +38,10 @@ class SignupController extends GetxController {
             'fullname', signupResponse.data.fullName.toString());
         await prefs.setString('mobile', signupResponse.data.mobile.toString());
         await prefs.setString('userId', signupResponse.data.id.toString());
-        Get.to(otpmobile(), arguments: [fullName, mobile]);
+        Get.to(otpmobile(),
+            transition: Transition.native,
+            duration: Duration(milliseconds: 300),
+            arguments: [fullName, mobile]);
         // TODO: Handle successful signup
       } else if (response.statusCode == 409) {
         // User already exists

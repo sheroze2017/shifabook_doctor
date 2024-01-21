@@ -68,10 +68,10 @@ class OTPController extends GetxController {
         var jsonResponse = json.decode(response.body);
         bool status = await jsonResponse['status'];
         String message = await jsonResponse['message'];
-        print(response.body);
-        // Handle the response data according to your requirements
         Get.snackbar('Success', 'Pin Match ');
-        await Get.to(SignIn());
+        Future.delayed(Duration(seconds: 2)).then((value) => Get.to(SignIn(),
+            transition: Transition.upToDown,
+            duration: Duration(milliseconds: 300)));
         // ...
       } else if (response.statusCode == 409) {
         var jsonResponse = json.decode(response.body);

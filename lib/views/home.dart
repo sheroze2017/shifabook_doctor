@@ -6,6 +6,7 @@ import 'package:responsive_sizer/responsive_sizer.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:shared_preferences/shared_preferences.dart';
+import 'package:shifabook_doctor/views/Booking/bookinglog.dart';
 import 'package:shifabook_doctor/views/doctor_info.dart';
 import 'package:shifabook_doctor/views/set_Avail.dart';
 import 'package:shifabook_doctor/views/update_screen.dart';
@@ -14,6 +15,7 @@ import '../Controller/doctorData/Availability.dart';
 import '../components/appbar.dart';
 import '../data/data.dart';
 import '../model/speciality.dart';
+import 'Booking/pendingConfirm.dart';
 
 String selectedCategorie = "Adults";
 
@@ -171,8 +173,9 @@ class _HomePageState extends State<HomePage> {
               ),
               DoctorsTile(
                 route: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => DoctorsInfo()));
+                  Get.to(DoctorsInfo(),
+                      transition: Transition.fade,
+                      duration: Duration(milliseconds: 400));
                 },
                 title: 'Profile',
               ),
@@ -181,10 +184,9 @@ class _HomePageState extends State<HomePage> {
               ),
               DoctorsTile(
                 route: () {
-                  Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                          builder: (context) => setAvailability()));
+                  Get.to(setAvailability(),
+                      transition: Transition.fade,
+                      duration: Duration(milliseconds: 400));
                 },
                 title: 'Set Availaility',
               ),
@@ -193,20 +195,22 @@ class _HomePageState extends State<HomePage> {
               ),
               DoctorsTile(
                 route: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => DoctorsInfo()));
+                  Get.to(BookingPending(),
+                      transition: Transition.fade,
+                      duration: Duration(milliseconds: 400));
                 },
-                title: 'Payment Logs',
+                title: 'Pending Approval',
               ),
               SizedBox(
                 height: 4.h,
               ),
               DoctorsTile(
                 route: () {
-                  Navigator.push(context,
-                      MaterialPageRoute(builder: (context) => DoctorsInfo()));
+                  Get.to(BookingLogs(),
+                      transition: Transition.native,
+                      duration: Duration(milliseconds: 450));
                 },
-                title: 'Profile History',
+                title: 'Change Status',
               )
             ],
           ),

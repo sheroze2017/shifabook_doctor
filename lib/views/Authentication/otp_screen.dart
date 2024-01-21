@@ -132,7 +132,10 @@ class _otpmobileState extends State<otpmobile> {
                         child: ElevatedButton(
                           onPressed: () async {
                             // await controller.checkUser(_numController.text);
-                            Get.to(Otp(), arguments: [_numController.text]);
+                            Get.to(Otp(),
+                                transition: Transition.native,
+                                duration: Duration(milliseconds: 300),
+                                arguments: [_numController.text]);
                             // Navigator.of(context).push(
                             //   MaterialPageRoute(
                             //     builder: (context) => Otp(),

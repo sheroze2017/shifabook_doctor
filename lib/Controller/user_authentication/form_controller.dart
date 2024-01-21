@@ -67,7 +67,9 @@ class DoctorController extends GetxController {
           await doctorProfileService().fetchAndStoreProfile();
           isloading.value = false;
 
-          Get.to(HomePage());
+          Get.offAll(HomePage(),
+              transition: Transition.native,
+              duration: Duration(milliseconds: 300));
         });
 
         //   final response2nd = await http.post(Uri.parse(url),
@@ -92,7 +94,7 @@ class DoctorController extends GetxController {
 
       // Handle any error messages or UI updates here
     } finally {
-      isloading.value = false;
+      //  isloading.value = false;
     }
   }
 }
